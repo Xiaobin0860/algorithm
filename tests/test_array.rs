@@ -2,10 +2,26 @@
 fn test_missing_number() {
     let input = [0, 1, 3];
     assert_eq!(2, find_missing_number(&input));
+    assert_eq!(2, find_missing_number2(&input));
     let input = [0, 1, 2, 3, 4, 5, 6, 7, 9];
     assert_eq!(8, find_missing_number(&input));
+    assert_eq!(8, find_missing_number2(&input));
     let input = [0, 1, 2, 3];
     assert_eq!(4, find_missing_number(&input));
+    assert_eq!(4, find_missing_number2(&input));
+
+    assert_eq!(4, missing_number(vec![0, 1, 2, 3]));
+}
+
+fn missing_number(nums: Vec<i32>) -> i32 {
+    let len = nums.len();
+    for i in 0..len {
+        let target = i as i32;
+        if nums[i] != target {
+            return target;
+        }
+    }
+    len as i32
 }
 
 #[test]
@@ -33,6 +49,22 @@ fn find_missing_number(arr: &[usize]) -> usize {
         }
     }
     len
+}
+
+fn find_missing_number2(arr: &[usize]) -> usize {
+    let mut left = 0;
+    let mut right = arr.len() - 1;
+    while left <= right {
+        let mid = (left + right) / 2;
+        if arr[mid] != mid {
+            return mid;
+        } else if arr[mid] > mid {
+            right = mid - 1;
+        } else {
+            left = mid + 1;
+        }
+    }
+    right + 1
 }
 
 fn count_number<T: PartialEq + Copy>(arr: &[T], target: T) -> usize {
